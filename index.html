@@ -477,9 +477,57 @@
           transform: translateY(0);
         }
       }
+
+      /* LOGIN OVERLAY */
+      .login-overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: var(--primary);
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+      .login-card {
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+      }
     </style>
   </head>
   <body>
+    <!-- LOGIN OVERLAY -->
+    <div id="loginOverlay" class="login-overlay">
+      <div class="login-card">
+        <div class="brand" style="margin-bottom: 20px; background: transparent;">
+          <img src="assets/logo.png" alt="Logo" style="height: 80px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
+        </div>
+        <h2 style="margin-bottom: 10px; color: var(--primary);">HỆ THỐNG PLACEMENT</h2>
+        <p style="margin-bottom: 25px; color: var(--text-light); font-size: 0.9rem;">Vui lòng đăng nhập để tiếp tục</p>
+        
+        <div class="form-group" style="text-align: left;">
+          <label>Tên đăng nhập</label>
+          <input type="text" id="loginUser" placeholder="Tên tài khoản...">
+        </div>
+        <div class="form-group" style="text-align: left; margin-top: 15px;">
+          <label>Mật khẩu</label>
+          <input type="password" id="loginPass" placeholder="••••••••" onkeypress="if(event.key === 'Enter') handleLogin()">
+        </div>
+        
+        <button class="btn btn-primary" style="width: 100%; margin-top: 25px; justify-content: center;" id="loginBtn" onclick="handleLogin()">
+          <i class="fas fa-sign-in-alt"></i> Đăng nhập
+        </button>
+        
+        <div id="loginError" style="color: var(--danger); font-size: 0.85rem; margin-top: 15px; display: none; font-weight: 600;">
+          Tài khoản hoặc mật khẩu không đúng!
+        </div>
+      </div>
+    </div>
     <!-- SPINNER -->
     <div class="spinner-overlay" id="spinner">
       <div class="spinner"></div>
@@ -531,6 +579,12 @@
       </div>
       <div class="nav-item" onclick="switchTab('historyTab', this)">
         <i class="fas fa-history"></i> <span class="nav-text">Lịch Sử Đơn</span>
+      </div>
+
+      <div style="margin-top: auto; padding: 20px 30px; border-top: 1px solid rgba(255,255,255,0.1);">
+        <div class="nav-item" style="padding: 10px 0; color: #f87171;" onclick="handleLogout()">
+          <i class="fas fa-sign-out-alt"></i> <span class="nav-text">Đăng xuất</span>
+        </div>
       </div>
     </div>
 
@@ -795,6 +849,7 @@
 
       /* ================= INIT ================= */
       document.addEventListener("DOMContentLoaded", function () {
+        checkAuth(); // Kiểm tra đăng nhập ngay khi load
         initDateFields();
         renderSizeRows();
         loadInitData();
@@ -807,6 +862,76 @@
           if (typeof autoFillImage === 'function') autoFillImage(null, this.value);
         });
       });
+
+      /* ================= AUTHENTICATION ================= */
+      const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyxVWaWhZNyOG-eMbu3lZ5sBwfcX2XGzs4MgFK34qqz6ulBL-RlpREsKkpz37bWOeAx/exec";
+
+      function checkAuth() {
+        const userData = localStorage.getItem('placement_user');
+        if (userData) {
+          const user = JSON.parse(userData);
+          // Kiểm tra xem session còn hạn không (7 ngày)
+          if (Date.now() - user.loginTime < 7 * 24 * 60 * 60 * 1000) {
+            document.getElementById('loginOverlay').style.display = 'none';
+            return;
+          }
+        }
+        document.getElementById('loginOverlay').style.display = 'flex';
+      }
+
+      async function handleLogin() {
+        const u = document.getElementById('loginUser').value;
+        const p = document.getElementById('loginPass').value;
+        const btn = document.getElementById('loginBtn');
+        const err = document.getElementById('loginError');
+
+        if (!u || !p) {
+          err.innerText = "Vui lòng nhập đầy đủ thông tin!";
+          err.style.display = 'block';
+          return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xác thực...';
+        err.style.display = 'none';
+
+        try {
+          const response = await fetch(WEB_APP_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+              action: 'login',
+              username: u,
+              password: p
+            })
+          });
+          const result = await response.json();
+
+          if (result.success) {
+            localStorage.setItem('placement_user', JSON.stringify({
+              username: result.username,
+              loginTime: Date.now()
+            }));
+            document.getElementById('loginOverlay').style.display = 'none';
+          } else {
+            err.innerText = result.message || "Tài khoản hoặc mật khẩu không đúng!";
+            err.style.display = 'block';
+          }
+        } catch (e) {
+          err.innerText = "Lỗi kết nối máy chủ!";
+          err.style.display = 'block';
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Đăng nhập';
+        }
+      }
+
+      function handleLogout() {
+        if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
+          localStorage.removeItem('placement_user');
+          location.reload();
+        }
+      }
+
 
       function initDateFields() {
         const today = new Date().toISOString().split("T")[0];
