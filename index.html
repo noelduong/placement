@@ -482,7 +482,7 @@
       .login-overlay {
         position: fixed;
         top: 0; left: 0; right: 0; bottom: 0;
-        background: var(--primary);
+        background: radial-gradient(circle, #e2e8f0 0%, #94a3b8 100%);
         z-index: 2000;
         display: flex;
         align-items: center;
@@ -490,13 +490,39 @@
         padding: 20px;
       }
       .login-card {
-        background: white;
+        background: #151c32; /* Navy background */
         padding: 40px;
         border-radius: 12px;
         width: 100%;
         max-width: 400px;
         text-align: center;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+        color: white;
+      }
+      .login-card h2 {
+        color: var(--accent);
+      }
+      .login-card p {
+        color: #94a3b8;
+      }
+      .login-card label {
+        color: #cbd5e1;
+      }
+      .login-card input {
+        background: rgba(255,255,255,0.05);
+        border-color: rgba(255,255,255,0.1);
+        color: white;
+      }
+      .login-card input:focus {
+        background: rgba(255,255,255,0.1);
+        border-color: var(--accent);
+      }
+      .login-card .btn-primary {
+        background: var(--accent);
+        color: var(--primary);
+      }
+      .login-card .btn-primary:hover {
+        background: var(--accent-hover);
       }
     </style>
   </head>
@@ -504,11 +530,11 @@
     <!-- LOGIN OVERLAY -->
     <div id="loginOverlay" class="login-overlay">
       <div class="login-card">
-        <div class="brand" style="margin-bottom: 20px; background: transparent;">
-          <img src="assets/logo.png" alt="Logo" style="height: 80px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
+        <div class="brand" style="margin-bottom: 30px; background: transparent;">
+          <img src="assets/logo.png" alt="Logo" style="height: 100px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));">
         </div>
-        <h2 style="margin-bottom: 10px; color: var(--primary);">HỆ THỐNG PLACEMENT</h2>
-        <p style="margin-bottom: 25px; color: var(--text-light); font-size: 0.9rem;">Vui lòng đăng nhập để tiếp tục</p>
+        <h2 style="margin-bottom: 10px;">HỆ THỐNG PLACEMENT</h2>
+        <p style="margin-bottom: 30px; font-size: 0.9rem;">Vui lòng đăng nhập để tiếp tục</p>
         
         <div class="form-group" style="text-align: left;">
           <label>Tên đăng nhập</label>
