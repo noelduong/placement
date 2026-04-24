@@ -864,7 +864,7 @@
       });
 
       /* ================= AUTHENTICATION ================= */
-      const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyxVWaWhZNyOG-eMbu3lZ5sBwfcX2XGzs4MgFK34qqz6ulBL-RlpREsKkpz37bWOeAx/exec";
+      const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwfNCRv3wTKL7WW80eZ82GjH7tDtB3eDjHVMzcctbrDwcXq6RJ37HU0ydz2ClIhOCqU0w/exec";
 
       function checkAuth() {
         const userData = localStorage.getItem('placement_user');
@@ -1794,7 +1794,7 @@
         showSpinner("Đang lưu đơn hàng lên hệ thống...");
 
         
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyxVWaWhZNyOG-eMbu3lZ5sBwfcX2XGzs4MgFK34qqz6ulBL-RlpREsKkpz37bWOeAx/exec";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwfNCRv3wTKL7WW80eZ82GjH7tDtB3eDjHVMzcctbrDwcXq6RJ37HU0ydz2ClIhOCqU0w/exec";
         
         fetch(WEB_APP_URL, {
           method: 'POST',
@@ -1826,7 +1826,7 @@
         const area = document.getElementById("historyArea");
         area.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-light);">Đang tải dữ liệu <i class="fas fa-spinner fa-spin"></i></div>`;
 
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyxVWaWhZNyOG-eMbu3lZ5sBwfcX2XGzs4MgFK34qqz6ulBL-RlpREsKkpz37bWOeAx/exec";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwfNCRv3wTKL7WW80eZ82GjH7tDtB3eDjHVMzcctbrDwcXq6RJ37HU0ydz2ClIhOCqU0w/exec";
         
         fetch(WEB_APP_URL + "?action=getHistory")
           .then(response => response.json())
@@ -1899,7 +1899,7 @@
           if (!td.innerHTML) {
              td.innerHTML = `<div style="padding:15px; text-align:center;"><i class="fas fa-spinner fa-spin"></i> Đang tải chi tiết...</div>`;
              
-             const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyxVWaWhZNyOG-eMbu3lZ5sBwfcX2XGzs4MgFK34qqz6ulBL-RlpREsKkpz37bWOeAx/exec";
+             const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwfNCRv3wTKL7WW80eZ82GjH7tDtB3eDjHVMzcctbrDwcXq6RJ37HU0ydz2ClIhOCqU0w/exec";
              
              fetch(WEB_APP_URL + "?action=getOrderDetails&orderNo=" + encodeURIComponent(orderNo))
                .then(res => res.json())
